@@ -15,49 +15,68 @@
    <body>
       <div class = "container">
          <h1>LOGGED IN Successfully</h1>
-         
+         <div class="row">
+         <p id="in" style="color: black"></p>
+         <p id="run" style="color: green"></p>
+      </div>
+
          <p id="timer" style="color: red"></p>
          
-
+         <b>On app close you will logout</b>
+         <b>If window remain idle for 30 sec then state changed(system idle info is not done)</b>
       </div>
       <script src="render.js"></script>
+    
+
       <script>
-            var seconds;
-            var timer;
-            function myFunction() {
-            if(seconds > 0) { 
-               seconds--;
-               document.getElementById("timer").innerHTML = seconds;
-            } else {
-               clearInterval(timer);
+         var seconds;
+
+         window.onload = resetTimer;
+         onmousemove = resetTimer;
+         onclick = resetTimer;    
+         onkeypress = resetTimer;   
+        
+
+         function resetTimer() {
+               seconds=0
+               clearInterval(idle);
+               
+            }
+         
+
+         setInterval(idle, 1000);
+         
+         function idle() {
+            if(seconds >= 0 & seconds < 30) { 
+               seconds++;
+             }
+            else{
                stop();
                toggle();
-               name();
-            }
+               resetTimer();
+             }
+            document.getElementById("timer").innerHTML = "seconds: "+seconds;
             }
 
-            window.onload= name()
-            function name() {
-               seconds=10;
-               timer = window.setInterval(function() { 
-                  myFunction();
-               }, 1000); 
-            }
-            
-
-            function toggle(){
+         function toggle(){
                alert("Resume");
                stop();
             }
-            document.getElementById("timer").innerHTML="10";
-
-   
+         document.getElementById("timer").innerHTML="0";
       </script>
 
+   <script>
+      //data
+      var d = new Date();
+      document.getElementById("in").innerHTML = "Time in:"+d.toLocaleTimeString();
+      
+     setInterval(myTimer, 1000); 
+      function myTimer() {
+         var d = new Date();
+         document.getElementById("run").innerHTML = "-"+d.toLocaleTimeString();
+         }
 
-
-   
-       
+   </script>
   
    </body>
 </html>

@@ -1,11 +1,14 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain} = require('electron');
 const axios = require('axios');
 var fs = require('fs');
 const os = require('os');
 const storage = require('electron-json-storage');
+
  storage.setDataPath(os.tmpdir());
 
 
+
+ 
 let win;
 function createWindow () {
     win = new BrowserWindow({
@@ -20,7 +23,6 @@ function createWindow () {
       });
     win.loadFile('index.html')
 
-  win.webContents.openDevTools()
   const dataPath = storage.getDataPath();
    
 }
@@ -43,6 +45,21 @@ function fetchData(email,password) {
             if (error) throw error;
           });
 
+        }
+        else{
+
+          const { dialog } = require('electron')
+          const options = {
+            type: 'question',
+            buttons: ['OK'],
+            defaultId: 2,
+            title: 'error message',
+            message: 'Email or password not matched',
+            
+          };
+          dialog.showMessageBox(null, options, (response) => {
+            
+          });
         }
         
     })
@@ -77,3 +94,13 @@ function fetchData(email,password) {
 
 
 app.on('ready', createWindow)
+
+
+app.on('before-quit', () => 
+
+    storage.get('email', function(error, data) {
+      axios.post('http://localhost:3000/api/v1/logout', data)
+    })
+ 
+);
+
